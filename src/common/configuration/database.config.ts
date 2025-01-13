@@ -32,19 +32,21 @@ class DatabaseConfig {
         return {
             type: 'postgres',
 
-            host: this.getValue('POSTGRES_HOST'),
-            port: parseInt(this.getValue('POSTGRES_PORT')),
-            username: this.getValue('POSTGRES_USER'),
-            password: this.getValue('POSTGRES_PASSWORD'),
-            database: this.getValue('POSTGRES_DATABASE'),
+            host: this.getValue('PGHOST'),
+            port: parseInt(this.getValue('PGPORT')),
+            username: this.getValue('PGUSER'),
+            password: this.getValue('PGPASSWORD'),
+            database: this.getValue('PGDATABASE'),
 
-            entities: ['**/*.entity{.ts,.js}'],
+            entities: [`${__dirname}/../../**/*.entity{.ts,.js}`],
 
             migrationsTableName: 'migration',
 
-            migrations: ['src/migration/*.ts'],
+            migrations: [`${__dirname}/../../migration/*.ts`],
 
             ssl: this.isProduction(),
+            synchronize: true,
+            logging: !this.isProduction(),
         };
     }
 
@@ -53,11 +55,11 @@ class DatabaseConfig {
 
 const configService = new DatabaseConfig(process.env)
     .ensureValues([
-        'POSTGRES_HOST',
-        'POSTGRES_PORT',
-        'POSTGRES_USER',
-        'POSTGRES_PASSWORD',
-        'POSTGRES_DATABASE'
+        'PGHOST',
+        'PGPORT',
+        'PGUSER',
+        'PGPASSWORD',
+        'PGDATABASE'
     ]);
 
 export { configService };
